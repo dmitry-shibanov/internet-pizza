@@ -1,0 +1,373 @@
+var a = 10;
+
+function change(){
+  var a = 15;
+  console.log(a);
+  a+=a;
+    console.log(a);
+}
+
+
+if(a){
+  var a = 21;
+}
+
+change();
+
+console.log(a);
+
+
+let mas = [];
+let mas1 = [];
+
+for(var i = 0;i<10;i++){
+  mas.push(()=>alert(i));
+  mas1.push(()=>i);
+}
+
+/*
+mas[3]();
+mas[9]();
+*/
+
+console.log(mas1[1]())
+i=15;
+console.log(mas1[1]())
+
+
+function getRest(...mynumbers){
+  console.log(mynumbers);
+}
+
+
+getRest(1,2,3,4,5,6,7);
+getRest(1,2,3,4,5,7)
+
+
+let mas2 = mas1.slice();
+
+mas2[0]=11111;
+console.log(mas2)
+
+
+console.log(mas1[1]())
+
+let [firstName, lastName] = [];
+
+console.log(firstName);
+console.log(lastName);
+
+let [firstName1="Гость", lastName1="Анонимный"] = [];
+
+console.log(firstName1);
+console.log(lastName1);
+
+let options = {
+  title: "Меню",
+  width: 100,
+  height: 200
+};
+
+let {title, width, height} = options;
+
+console.log(title);
+
+
+
+let options1 = {
+  title1: "Меню",
+  width1: 100,
+  height1: 200,
+};
+
+let {width1: w, height1: h, extra=100, title1} = options1;
+
+console.log(w)
+console.log(title1);
+console.log(extra);
+
+let options2 = {
+  title2: "Меню",
+  width2: 100,
+  height2: 200
+};
+
+let {title2, ...size} = options2;
+
+console.log(size)
+
+
+// {a, b} = {a:5, b:6} //mistake {a, b} interpreat as a block scope
+ let b;
+ ({a, b} = {a:5, b:6})
+
+console.log(`b is ${b}`);
+
+let options3 = {
+  size1: {
+    width2: 100,
+    height2: 200
+  },
+  items4: ["Пончик", "Пирожное"]
+}
+
+console.log(options3);
+let { title4="Меню", size1: {width2, height2}, items4: [item1, item2] } = options3;
+
+console.log(width2)
+
+
+let options4 = {
+  size: {
+    width: 101,
+    height: 201
+  },
+  items: ["Пончик1", "Пирожное1"]
+}
+
+
+console.log('options4.size'+options4.size.width);
+
+({size:{width, height}, items: [item1, item2]} = options4);
+
+console.log(width);
+
+
+
+function sayHi(who = getCurrentUser().toUpperCase()) {
+  console.log('Привет, ' + who);
+}
+
+function getCurrentUser() {
+  return 'Вася';
+}
+
+let normalMas = [1,2,3,4,5,6]
+
+console.log(normalMas);
+console.log(...normalMas);
+// get value to who only after sayHi
+sayHi(); // Привет, ВАСЯ
+
+
+function showMenu({title, width, height}) {
+  console.log(title + ' ' + width + ' ' + height); // Меню 100 200
+}
+
+showMenu(options);
+
+
+let options5 = {
+  title: "Меню5"
+};
+
+function showMenu1({title="Заголовок", width:w=100, height:h=200}) {
+  console.log(title + ' ' + w + ' ' + h);
+}
+
+// объект options будет разбит на переменные
+showMenu1(options5); // Меню 100 200
+var hm = 10
+function h3(hm){
+  this.hm = 11;
+  console.log(hm);
+}
+
+h3(21);
+
+
+let group = {
+  title11: "Наш курс",
+  students: ["Вася", "Петя", "Даша"],
+
+  showList: function() {
+    var title11 = 'dalsjkadl'
+    this.students.forEach(function(student) {
+      console.log(title11 + ': ' + student); // будет ошибка
+    })
+  }
+}
+
+group.showList();
+
+function f(strings, ...values) {
+  console.log(JSON.stringify(strings));     // ["Sum of "," + "," =\n ","!"]
+  console.log(JSON.stringify(strings.raw)); // ["Sum of "," + "," =\\n ","!"]
+  console.log(JSON.stringify(values));      // [3,5,8]
+  console.log('-------------------------------------------------------');
+  for(let i = 0;i<strings.raw.length;i++){
+    console.log(strings[i]);
+  }
+  console.log('-------------------------------------------------------');
+}
+
+let apples = 3;
+let oranges = 5;
+
+//          |  s[0] | v[0] |s[1]| v[1]  |s[2]  |      v[2]      |s[3]
+let str = f`Sum of ${apples} + ${oranges} =\n ${apples + oranges} ${'other value'}!`;
+
+
+
+let messages = {
+  "Hello, {0}!": "Привет, {0}!",
+  numbers: 2
+};
+
+function i18n(strings, ...values) {
+  // По форме строки получим шаблон для поиска в messages
+  // На месте каждого из значений будет его номер: {0}, {1}, …
+  let pattern = "";
+  for(let i=0; i<values.length; i++) {
+    pattern += strings[i] + '{' + i + '}';
+    console.log(`pattern is ${pattern}`);
+  }
+  pattern += strings[strings.length-1];
+  // Теперь pattern = "Hello, {0}!"
+
+  let translated = messages[pattern]; // "Привет, {0}!"
+  for(let item in messages){
+    console.log(`item from message is ${item}`)
+    console.log(messages["numbers"]);
+  }
+  console.log(`translated is ${translated}`);
+  // Заменит в "Привет, {0}" цифры вида {num} на values[num]
+  return translated.replace(/\{(\d)\}/g, (s, num) => values[num]);
+}
+
+// Пример использования
+let name = "Вася";
+
+// Перевести строку
+console.log( i18n`Hello, ${name}!` ); // Привет, Вася!
+
+
+console.log(Boolean(''))
+console.log(1+null);
+console.log(1+undefined);
+
+if(''){
+  console.log(`empty string is true`)
+}
+
+
+console.log( '𝒳'.charCodeAt(0) + ' ' + '𝒳'.charCodeAt(1) ); // 55349 56499
+console.log( '𝒳'.codePointAt(0) ); // 119987
+// Правильно
+console.log( String.fromCodePoint(119987) ); // 𝒳
+// Неверно!
+console.log( String.fromCharCode(119987) ); // 풳
+
+console.log("S\u0307\u0323"); // Ṩ
+console.log('\u0307')
+
+console.log( "S\u0307\u0323".normalize() == "S\u0323\u0307".normalize());
+console.log( "S\u0307\u0323".normalize() === "S\u0323\u0307".normalize());
+console.log( "S\u0307\u0323" == "S\u0323\u0307")
+
+
+console.log(name);
+
+
+console.log(name.includes('а'))
+console.log(name.startsWith('Ва'))
+console.log(name.endsWith('ся'))
+console.log(name.repeat(4))
+
+
+let isAdmin = true;
+
+let user = {
+  name,
+  isAdmin
+};
+
+name = 'Dmitry';
+
+let user1 = {
+  name,
+  isAdmin
+};
+console.log( JSON.stringify(user) );
+console.log( JSON.stringify(user1) );
+
+
+let animal = {
+  kind:'Some kind',
+  walk:()=>true,
+  jump:()=>'I can jump'
+}
+
+let pet = {
+  name:'Some pet animal',
+  kind:'pet'
+}
+
+let cat = {
+  name:"Kesha",
+  say: "Мяу"
+}
+
+Object.assign(cat,animal,pet);
+console.log(cat.jump())
+console.log(JSON.stringify(cat));
+
+mas5 = [1,2,3,4,5,6,7,8,9,10];
+
+
+[...mas6] = mas5
+
+console.log(mas6);
+mas6[1]= 100;
+mas5[3] = 200;
+console.log(`mas5 is ${mas5}`)
+console.log(`mas6 is ${mas6}`)
+
+
+const key = 'name';
+const user3 = {
+  [key]: 'dmitry'
+}
+
+console.log(user3.name);
+console.log(user3[key]);
+
+countAge = (age) =>{
+
+}
+
+console.log(+'1' + +'a')
+console.log(+' 45');
+console.log(+'76 ');
+console.log(+(' 1'+'1 '))
+console.log(+('1e45'+'1e76'))
+
+
+
+console.log(+'0x11e0')
+
+
+class A{
+  constructor(){
+    this.a = [1,2,3,4,5,6];
+      this.addMore = this.addMore.bind(this);
+        this.some = () => this.say();
+  }
+
+  addMore(num){
+    this.a.push(num);
+    console.log(this.a);
+  }
+
+  say(){
+    console.log('say hi');
+  }
+
+}
+
+let myA = new A();
+
+myA.addMore(23)
+myB = myA.some
+myB();
+myB();
