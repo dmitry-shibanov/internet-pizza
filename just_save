@@ -371,3 +371,604 @@ myA.addMore(23)
 myB = myA.some
 myB();
 myB();
+
+
+//---------------------------------------------------
+
+let user = {
+  0:2,
+    "0":1
+
+}
+
+let user1 = {
+    0:1,
+      "0":2,
+      method:()=>'work'
+
+}
+let user2 = {};
+let user3 = {
+    0:1,
+      "0":2,
+      method:()=>'work',
+      "method":()=>"work method"
+
+}
+console.log(user3.method())
+for(let item in user1){
+  user2[item] = user1[item];
+}
+
+console.log(JSON.stringify(user));
+console.log(JSON.stringify(user1));
+console.log(JSON.stringify(user2));
+console.log(user2.method())
+/*
+При «раскрытии» свойств объекта в консоли – браузер всегда выводит их текущие 
+(на момент раскрытия) значения.
+
+Так происходит именно потому, что вывод не делает «копию» текущего содержимого, 
+а сохраняет лишь ссылку на объект. 
+Запомните эту особенность консоли, в будущем, 
+при отладке скриптов у вас не раз возникнет подобная ситуация.
+*/
+
+
+/*
+Длина length – не количество элементов массива, а последний индекс + 1.
+ */
+
+/**
+ При уменьшении length массив укорачивается.
+
+Причем этот процесс необратимый, 
+т.е. даже если потом вернуть length обратно – значения не восстановятся:
+var arr = [1, 2, 3, 4, 5];
+
+arr.length = 2; // укоротить до 2 элементов
+alert( arr ); // [1, 2]
+
+arr.length = 5; // вернуть length обратно, как было
+alert( arr[3] ); // undefined: значения не вернулись
+
+Самый простой способ очистить массив – это arr.length=0.
+ */
+
+/**
+ Кроме того, у него есть одна особенность. Обычно new Array(элементы, ...) 
+ создаёт массив из данных элементов, 
+ но если у него один аргумент-число new Array(число), 
+ то он создает массив без элементов, но с заданной длиной.
+ */
+
+/*
+У метода split есть необязательный второй аргумент – 
+ограничение на количество элементов в массиве. 
+Если их больше, чем указано – остаток массива будет отброшен
+
+Вызов split с пустой строкой разобьёт по буквам:
+*/
+
+console.log(new Array(4).join('kf'))
+
+/*
+Да, элемент удален из массива, но не так, как нам этого хочется. Образовалась «дырка».
+
+Это потому, что оператор delete удаляет пару «ключ-значение». Это – все, что он делает. 
+Обычно же при удалении из массива мы хотим, 
+чтобы оставшиеся элементы сдвинулись и заполнили образовавшийся промежуток.
+*/
+
+/**
+ arr.splice(index[, deleteCount, elem1, ..., elemN])
+Удалить deleteCount элементов, начиная с номера index, а 
+затем вставить elem1, ..., elemN на их место. Возвращает массив из удалённых элементов
+ */
+
+/**
+ Допускается использование отрицательного номера позиции, 
+ которая в этом случае отсчитывается с конца:
+
+ Метод splice также может вставлять элементы без удаления, 
+ для этого достаточно установить deleteCount в 0:
+ */
+let arr = [1,2,3,4,5,6,7]
+console.log(arr.splice());
+console.log(arr);
+
+console.log(arr.splice(0));
+console.log(arr);
+
+/*
+Метод slice(begin, end) копирует участок массива от begin до end, 
+не включая end. Исходный массив при этом не меняется.
+ */
+
+/**
+ function compareNumeric(a, b) {
+  if (a > b) return 1;
+  if (a < b) return -1;
+}
+
+var arr = [ 1, 2, 15 ];
+
+arr.sort(compareNumeric);
+
+alert(arr);  // 1, 2, 15
+ */
+
+console.log(Object.keys(user2));
+
+
+function F(){
+   
+}
+
+/**
+ В старом стандарте JavaScript псевдо-массив arguments и переменные-параметры 
+ ссылаются на одни и те же значения.
+В результате изменения arguments влияют на параметры и наоборот.
+Например:
+
+ function f(x) {
+  arguments[0] = 5; // меняет переменную x
+  alert( x ); // 5
+}
+
+f(1);
+ */
+
+
+var factorial = function f(n) {
+  return n==1 ? 1 : n*f(n-1);
+};
+
+/**
+ В старом стандарте JavaScript объект arguments не только хранил список аргументов, 
+ но и содержал в свойстве arguments.callee ссылку на функцию, 
+ которая выполняется в данный момент.
+ */
+// подвызов через arguments.callee
+var factorial1 = function(n) {
+  return n==1 ? 1 : n*arguments.callee(n-1);
+};
+
+console.log(factorial(5));
+console.log(factorial1(5));
+
+
+f1();
+
+function f1() {
+  console.log( arguments.callee.caller ); // null, меня вызвали из глобального кода
+  f2();
+}
+
+function f2() {
+  console.log( arguments.callee.caller ); // f1, функция, из которой меня вызвали
+  f3();
+}
+
+function f3() {
+  console.log( arguments.callee.caller ); // f2, функция, из которой меня вызвали
+}
+
+funcDeclaration();
+
+function funcDeclaration(){
+  console.log(a);
+}
+
+var a = 5;
+
+/**
+ Сравните два кода ниже.
+
+Первый выведет undefined, так как переменная была добавлена в window на фазе инициализации:
+
+ alert( a ); // undefined
+
+var a = 5;
+Второй код выведет ошибку, так как переменной ещё не существует:
+
+ alert( a ); // error, a is not defined
+
+a = 5;
+Это, конечно, для общего понимания, мы всегда объявляем переменные через var.
+ */
+
+/**
+ Для получения [[Class]] нужна именно внутренняя реализация toString стандартного объекта 
+ Object, другая не подойдёт.
+
+К счастью, методы в JavaScript – это всего лишь функции-свойства объекта, 
+которые можно скопировать в переменную и применить на другом объекте через call/apply. 
+Что мы и делаем для {}.toString.
+Метод также можно использовать с примитивами:
+
+ alert( {}.toString.call(123) ); // [object Number]
+alert( {}.toString.call("строка") ); // [object String]
+ */
+
+
+/**
+ Вызов JSON.parse(str) превратит строку с данными в формате JSON 
+ в JavaScript-объект/массив/значение.
+ */
+
+let masFromJSON = JSON.parse("[1,2,3,4,5,6,7,8]");
+console.log(Array.isArray(masFromJSON));
+
+/**
+ Для интеллектуального восстановления из строки у JSON.parse(str, reviver) есть второй параметр reviver, который является функцией function(key, value).
+
+Если она указана, то в процессе чтения объекта из строки JSON.parse передаёт ей по очереди все создаваемые пары ключ-значение и может возвратить либо преобразованное значение, либо undefined, если его нужно пропустить.
+
+В данном случае мы можем создать правило, что ключ date всегда означает дату:
+
+ 
+
+
+
+
+
+
+// дата в строке - в формате UTC
+var str = '{"title":"Конференция","date":"2014-11-30T12:00:00.000Z"}';
+
+var event = JSON.parse(str, function(key, value) {
+  if (key == 'date') return new Date(value);
+  return value;
+});
+
+alert( event.date.getDate() ); // теперь сработает!
+
+
+Кстати, эта возможность работает и для вложенных объектов тоже:
+
+
+var schedule = '{ \
+  "events": [ \
+    {"title":"Конференция","date":"2014-11-30T12:00:00.000Z"}, \
+    {"title":"День рождения","date":"2015-04-18T12:00:00.000Z"} \
+  ]\
+}';
+
+schedule = JSON.parse(schedule, function(key, value) {
+  if (key == 'date') return new Date(value);
+  return value;
+});
+
+alert( schedule.events[1].date.getDate() ); // сработает!
+ */
+
+/**
+ У объекта room нет метода toJSON. Поэтому он сериализуется перечислением свойств.
+
+Мы, конечно, могли бы добавить такой метод, тогда в итог попал бы его результат:
+
+var room = {
+  number: 23,
+  toJSON: function() {
+      return this.number;
+    }
+};
+
+alert( JSON.stringify(room) ); // 23
+ */
+
+/**
+ var user = {
+  name: "Вася",
+  age: 25,
+  window: window
+};
+
+var str = JSON.stringify(user, function(key, value) {
+  if (key == 'window') return undefined;
+  return value;
+});
+
+alert( str );
+
+Функция replacer работает рекурсивно
+То есть, если объект содержит вложенные объекты, 
+массивы и т.п., то все они пройдут через replacer.
+ */
+
+let my_ob = {
+}
+
+let my_obj = {
+
+}
+
+my_ob.assignTo = my_obj;
+my_obj.assignTo = my_ob;
+
+//console.log(JSON.stringify(my_ob))
+//console.log(JSON.stringify(window));
+
+//var timerId = setTimeout(func / code, delay[, arg1, arg2...])
+
+
+/**
+ Если первый аргумент является строкой, то интерпретатор создаёт анонимную функцию из этой строки.
+
+То есть такая запись тоже сработает:
+
+ setTimeout("alert('Привет')", 1000)
+ */
+
+var timerId = setTimeout(function() { console.log(112) }, 1000);
+console.log(timerId);
+clearTimeout(timerId);
+
+var timerId = setInterval(function() {
+  console.log( "тик" );
+}, 2000);
+
+// через 5 сек остановить повторы
+setTimeout(function() {
+  clearInterval(timerId);
+  console.log( 'стоп' );
+}, 6500);
+
+
+/**
+ var x = 5;
+eval(" alert( x ); x = 10"); // 5, доступ к старому значению
+alert( x ); // 10, значение изменено внутри eval
+
+alert( eval('1+1') ); // 2
+
+ При use strict код внутри eval по-прежнему сможет читать и менять внешние переменные, 
+ однако переменные и функции, объявленные внутри eval, не попадут наружу.
+ */
+
+eval("console.log('eval works')");
+
+/*
+Итак, если где-то в функции есть eval, то его взаимодействие с локальными переменными 
+будет нарушено с непредсказуемыми побочными эффектами.
+Некоторые инструменты сжатия предупреждают, когда видят eval или 
+стараются вообще не сжимать такой 
+код вместе с его внешними функциями, но всё это борьба с последствиями кривого кода.
+*/
+
+/**
+ try..catch подразумевает, что код синтаксически верен
+
+ Ошибку, которая произойдёт в коде, запланированном «на будущее», 
+ например в setTimeout, try..catch не поймает:
+ */
+
+/**
+ name
+Тип ошибки. Например, при обращении к несуществующей переменной: "ReferenceError".
+message
+Текстовое сообщение о деталях ошибки.
+stack
+Везде, кроме IE8-, есть также свойство stack, которое содержит строку с информацией 
+о последовательности вызовов, которая привела к ошибке.
+ */
+
+/**
+ Блок finally срабатывает при любом выходе из try..catch, в том числе и return.
+ */
+
+/**
+ В браузере существует специальное свойство window.onerror, если в него записать функцию, 
+ то она выполнится и получит в аргументах сообщение ошибки, текущий URL и номер строки, 
+ откуда «выпала» ошибка.
+
+обернут в script
+  window.onerror = function(message, url, lineNumber) {
+    alert("Поймана ошибка, выпавшая в глобальную область!\n" +
+      "Сообщение: " + message + "\n(" + url + ":" + lineNumber + ")");
+  };
+
+  function readData() {
+    error(); // ой, что-то не так
+  }
+
+  readData();
+
+ */
+
+/*
+Мы уже работали в ООП-стиле, создавая объекты такого вида:
+
+ function User(name) {
+
+  this.sayHi = function() {
+    alert( "Привет, я " + name );
+  };
+
+}
+
+var vasya = new User("Вася"); // создали пользователя
+vasya.sayHi(); // пользователь умеет говорить "Привет"
+ */
+
+/**
+ Классом в объектно-ориентированной разработке называют шаблон
+  программный код, предназначенный для создания объектов и методов.
+
+В JavaScript классы можно организовать по-разному. Говорят, что класс User 
+написан в «функциональном» стиле. Далее мы также увидим «прототипный» стиль.
+ */
+
+/**
+ function CoffeeMachine(power) {
+  this.waterAmount = 0; // количество воды в кофеварке
+
+  alert( 'Создана кофеварка мощностью: ' + power + ' ватт' );
+}
+
+// создать кофеварку
+var coffeeMachine = new CoffeeMachine(100);
+
+// залить воды
+coffeeMachine.waterAmount = 200;
+
+Локальные переменные, включая параметры конструктора, 
+можно считать приватными свойствами.
+
+Свойства, записанные в this, можно считать публичными.
+ */
+
+
+function CoffeeMachine(power) {
+  this.waterAmount = 0;
+  var WATER_HEAT_CAPACITY = 4200;
+
+  function getBoilTime() {
+    console.log(`this.waterAmount ${this.waterAmount}`);
+    console.log(WATER_HEAT_CAPACITY);
+    console.log(power);
+    return this.waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+  }
+
+  function onReady() {
+    //alert( 'Кофе готов!' );
+  }
+
+  this.run = function() {
+    setTimeout(onReady, getBoilTime.call(this));
+  };
+
+}
+
+// создаю кофеварку, мощностью 100000W чтобы кипятила быстро
+/**
+ getBoilTime().call(this) если в run. не напишем то так то в конце получим undefined
+ и соответственно на умножение NaN а так setTimeout пройдет моментально. 
+ */
+var coffeeMachine = new CoffeeMachine(100000);
+coffeeMachine.waterAmount = 200;
+
+coffeeMachine.run();
+
+
+//setTimeout(console.log('Coffee is ready',NaN));
+
+/**
+ альтернативный вариант через bind 
+ function CoffeeMachine(power) {
+  this.waterAmount = 0;
+
+  var WATER_HEAT_CAPACITY = 4200;
+
+  var getBoilTime = function() {
+    return this.waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+  }.bind(this);
+
+  function onReady() {
+    alert( 'Кофе готов!' );
+  }
+
+  this.run = function() {
+    setTimeout(onReady, getBoilTime());
+  };
+
+}
+
+var coffeeMachine = new CoffeeMachine(100000);
+coffeeMachine.waterAmount = 200;
+
+coffeeMachine.run();
+ */
+
+/**
+ Еще один альтернативный метод при котором мы сохраняем this в отдельной перемене
+ function CoffeeMachine(power) {
+  this.waterAmount = 0;
+
+  var WATER_HEAT_CAPACITY = 4200;
+
+  var self = this;
+
+  function getBoilTime() {
+      return self.waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+    }
+
+  function onReady() {
+    alert( 'Кофе готов!' );
+  }
+
+  this.run = function() {
+    setTimeout(onReady, getBoilTime());
+  };
+
+}
+
+var coffeeMachine = new CoffeeMachine(100000);
+coffeeMachine.waterAmount = 200;
+
+coffeeMachine.run();
+ */
+
+/**
+ Алгоритм проверки obj instanceof Constructor:
+
+1 Получить obj.__proto__
+2 Сравнить obj.__proto__ с Constructor.prototype
+3 Если не совпадает, тогда заменить obj на obj.__proto__ и повторить проверку на шаге 2 
+до тех пор, пока либо не найдется совпадение (результат true), 
+либо цепочка прототипов не закончится (результат false).
+ */
+
+/**
+ Забавно, что сама функция-конструктор не участвует в процессе проверки! Важна только цепочка прототипов для проверяемого объекта.
+
+Это может приводить к забавному результату и даже ошибкам в проверке при изменении 
+prototype, например:
+
+// Создаём объект rabbit, как обычно
+function Rabbit() {}
+var rabbit = new Rabbit();
+
+// изменили prototype...
+Rabbit.prototype = {};
+
+// ...instanceof перестал работать!
+alert( rabbit instanceof Rabbit ); // false
+ */
+
+
+/*
+Оператор instanceof не срабатывает, когда значение приходит из другого окна или фрейма.
+
+Например, массив, который создан в ифрейме и передан родительскому окну – 
+будет массивом в том ифрейме, но не в родительском окне. 
+Проверка instanceof Array в родительском окне вернёт false.
+
+Вообще, у каждого окна и фрейма – своя иерархия объектов и свой window .
+
+Как правило, эта проблема возникает со встроенными объектами, в этом случае 
+используется проверка внутреннего свойства [[Class]], 
+которое подробнее описано в главе Типы данных: [[Class]], instanceof и утки.
+ */
+
+let user4 = {
+  name:'Dmitry',
+  myName: function(){
+   return this.name;
+  }
+}
+
+let test = ()=>{
+  this.testFunc = 'testFunc';
+  return this.testFunc;
+}
+
+let testFunc = 'test';
+console.log(test.testFunc)
+let name = 'Dmitry Shibanov'
+
+console.log(user4.myName());
+
+var i,j = 0;
+console.log(i);
